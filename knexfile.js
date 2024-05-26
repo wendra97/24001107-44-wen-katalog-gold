@@ -12,6 +12,7 @@ module.exports = {
       user: "postgres",
       password: "superadmin",
       database: "katalog_db",
+      timezone: "+07:00",
     },
     pool: {
       min: 2,
@@ -19,6 +20,7 @@ module.exports = {
     },
     migrations: {
       tableName: "knex_migrations",
+      directory: "./database/migrations",
     },
   },
 
