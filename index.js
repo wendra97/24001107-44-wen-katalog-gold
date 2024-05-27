@@ -39,6 +39,23 @@ app.post("/users", async (req, res) => {
   return res.json({ message: "User successfully created", data: user });
 });
 
+app.put("/users/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name, email, username, password } = req.body;
+  const updatedAt = new Date().toISOString();
+  const user = await db("users").where({ user_id: id }).update(
+    {
+      name: name,
+      email: email,
+      username: username,
+      password: password,
+      updated_at: updatedAt,
+    },
+    ["name", "email", "username", "password"]
+  );
+  return res.json({ message: "User successfully updated", data: user });
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
