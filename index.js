@@ -56,6 +56,12 @@ app.put("/users/:id", async (req, res) => {
   return res.json({ message: "User successfully updated", data: user });
 });
 
+app.delete("/users/:id", async (req, res) => {
+  const { id } = req.params;
+  await db("users").where({ user_id: id }).del();
+  return res.json({ message: `User ${id} successfully deleted` });
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
