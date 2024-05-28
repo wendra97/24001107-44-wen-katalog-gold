@@ -1,24 +1,14 @@
 const express = require("express");
 const app = express();
 const port = 8080;
-const knex = require("knex");
-const db = require("./database/database.js");
+const db = require("./config/database");
+const usersRouter = require("./routes/users-route.js");
 
 app.use(express.json());
+app.use(usersRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
-});
-
-app.get("/users", async (req, res) => {
-  const users = await db("users").select("*");
-  return res.json({ data: users });
-});
-
-app.get("/users/:id", async (req, res) => {
-  const { id } = req.params;
-  const user = await db("users").select("*").where({ user_id: id }).first();
-  return res.json({ data: user });
 });
 
 app.post("/users", async (req, res) => {
