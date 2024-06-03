@@ -1,0 +1,74 @@
+<%- include('../partials/header', { title: title, titleIcon: titleIcon }) %>
+<div class="container-fluid">
+  <h1 class="mt-5">Catalogue List</h1>
+  <div class="d-flex justify-content-end">
+    <a href="/catalogues/add" class="btn btn-primary btn-sm">Add Catalogue</a>
+  </div>
+  <table
+    class="table table-striped"
+    style="border: 1px solid #cecece; font-size: 15px"
+  >
+    <thead class="table-dark">
+      <tr>
+        <th>No.</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Category</th>
+        <th>Created Date</th>
+        <th>Last Updated Date</th>
+        <th rowspan="2" class="text-center">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% catalogues.forEach((catalogue, index) => { %>
+      <tr>
+        <td><%= index + 1 %></td>
+        <td><%= catalogue.name %></td>
+        <td><%= catalogue.price %></td>
+        <td><%= catalogue.category %></td>
+        <td><%= catalogue.created_at %></td>
+        <td><%= catalogue.updated_at %></td>
+        <td>
+          <div class="d-flex justify-content-center align-items-center">
+            <a
+              href="/catalogues/edit/<%= catalogue.catalogue_id %>"
+              class="btn btn-primary btn-sm mx-1"
+              >Edit</a
+            >
+            <a
+              href="#"
+              class="btn btn-danger btn-sm mx-1"
+              onclick="deleteCatalogue('<%= catalogue.catalogue_id %>')"
+              >Delete</a
+            >
+          </div>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>
+<script>
+  async function deleteCatalogue(catalogueId) {
+    if (confirm("Are you sure you want to delete this catalogue?")) {
+      try {
+        const response = await fetch(`/catalogues/delete/${catalogueId}`, {
+          method: "delete",
+        });
+        const responseData = await response.json();
+        if (response.ok) {
+          alert(responseData.message);
+          if (responseData.redirect) {
+            window.location.href = responseData.redirectUrl;
+          }
+        } else {
+          alert(responseData.message || "Error deleting catalogue");
+        }
+      } catch (error) {
+        alert("Error deleting catalogue");
+      }
+    }
+  }
+</script>
+
+<%- include('../partials/footer') %>

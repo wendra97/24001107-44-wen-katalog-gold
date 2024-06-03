@@ -1,0 +1,79 @@
+<%- include('../partials/header', { title: title, titleIcon: titleIcon }) %>
+<div class="container">
+  <h1 class="mt-5">Edit Catalogue</h1>
+  <form
+    id="updateCatalogueForm"
+    action="/catalogues/edit/<%= catalogue.catalogue_id %>"
+    method="post"
+    onsubmit="return updateCatalogue(event)"
+  >
+    <input type="hidden" name="_method" value="put" />
+    <div class="mb-3">
+      <label for="name" class="form-label">Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="name"
+        name="name"
+        value="<%= catalogue.name %>"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="price" class="form-label">Price</label>
+      <input
+        type="text"
+        class="form-control"
+        id="price"
+        name="price"
+        value="<%= catalogue.price %>"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="category" class="form-label">Category</label>
+      <input
+        type="text"
+        class="form-control"
+        id="category"
+        name="category"
+        value="<%= catalogue.category %>"
+        required
+      />
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+  </form>
+  <script>
+    async function updateCatalogue(event) {
+      event.preventDefault();
+      const form = document.getElementById("updateCatalogueForm");
+      const formData = new FormData(form);
+      const catalogueId = window.location.pathname.split("/").pop();
+
+      try {
+        const response = await fetch(`/catalogues/edit/${catalogueId}`, {
+          method: "put",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(Object.fromEntries(formData)),
+          catalogueId,
+        });
+
+        if (response.ok) {
+          const responseData = await response.json();
+          alert(responseData.message);
+          if (responseData.redirect) {
+            window.location.href = responseData.redirectUrl;
+          }
+        } else {
+          alert("Failed to update catalogue.");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again.");
+      }
+    }
+  </script>
+</div>
+<%- include('../partials/footer') %>

@@ -1,0 +1,68 @@
+<%- include('../partials/header', { title: title, titleIcon: titleIcon }) %>
+<div class="container">
+  <h1 class="mt-5">Add Catalogue</h1>
+  <form
+    id="addCatalogueForm"
+    action="/catalogues/add"
+    method="post"
+    onsubmit="addCatalogue(event)"
+  >
+    <div class="mb-3">
+      <label for="name" class="form-label">Name</label>
+      <input type="text" class="form-control" id="name" name="name" required />
+    </div>
+    <div class="mb-3">
+      <label for="price" class="form-label">Price</label>
+      <input
+        type="text"
+        class="form-control"
+        id="price"
+        name="price"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="category" class="form-label">Category</label>
+      <input
+        type="text"
+        class="form-control"
+        id="category"
+        name="category"
+        required
+      />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  <script>
+    async function addCatalogue(event) {
+      event.preventDefault();
+      const form = document.getElementById("addCatalogueForm");
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch(`/catalogues/add`, {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(Object.fromEntries(formData)),
+        });
+
+        if (response.ok) {
+          const responseData = await response.json();
+          console.log(responseData.data);
+          alert(responseData.message);
+          if (responseData.redirect) {
+            window.location.href = responseData.redirectUrl;
+          }
+        } else {
+          alert("Failed to add catalogue.");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again.");
+      }
+    }
+  </script>
+</div>
+<%- include('../partials/footer') %>
