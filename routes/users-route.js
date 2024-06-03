@@ -15,8 +15,9 @@ router.use(
   })
 );
 router.get("/users", usersController.getAllUsers);
+router.get("/users/add", usersController.getAddUserForm);
 router.get("/users/:id", usersController.getUserById);
-router.post("/users", usersController.addUser);
+router.post("/users/add", usersController.addUser);
 router.put("/users/:id", usersController.updateUser);
 router.delete("/users/delete/:id", usersController.deleteUser);
 router.get("/users/edit/:id", usersController.getUserById);

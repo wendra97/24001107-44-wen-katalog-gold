@@ -49,12 +49,32 @@ const getUserById = async (req, res) => {
   //return res.status(200).json({ data: user });
 };
 
+const getAddUserForm = async (req, res) => {
+  const titleIcon = `data:image/svg+xml,<svg 
+  xmlns="http://www.w3.org/2000/svg" 
+  width="16" 
+  height="16" 
+  fill="white" 
+  class="bi bi-person-fill-add" 
+  viewBox="0 0 16 16">
+  <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+  <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"/>
+  </svg>`;
+  return res.status(200).render("../views/user/users-add.ejs", {
+    titleIcon,
+    title: "Add User",
+  });
+};
+
 const addUser = async (req, res) => {
   const { name, email, username, password } = req.body;
   const user = await usersModel.addUser(name, email, username, password);
-  return res
-    .status(200)
-    .json({ message: "User successfully created", data: user });
+  return res.status(200).json({
+    message: "User successfully added",
+    data: user,
+    redirect: true,
+    redirectUrl: "/users",
+  });
 };
 
 const updateUser = async (req, res) => {
@@ -73,16 +93,21 @@ const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await usersModel.deleteUser(id); // Adjust to your deletion logic
-    res
-      .status(200)
-      .json({
-        message: `User ${id} successfully deleted`,
-        redirect: true,
-        redirectUrl: "/users",
-      });
+    res.status(200).json({
+      message: `User ${id} successfully deleted`,
+      redirect: true,
+      redirectUrl: "/users",
+    });
   } catch (error) {
     res.status(500).json({ message: "Error deleting user" });
   }
 };
 
-module.exports = { getAllUsers, getUserById, addUser, updateUser, deleteUser };
+module.exports = {
+  getAllUsers,
+  getUserById,
+  addUser,
+  updateUser,
+  deleteUser,
+  getAddUserForm,
+};
