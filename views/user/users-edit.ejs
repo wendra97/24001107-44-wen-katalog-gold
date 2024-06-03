@@ -65,7 +65,7 @@
           const responseData = await response.json();
           alert(responseData.message);
           if (responseData.redirect) {
-            window.location.href = responseData.redirectUrl; // Redirect to specified URL
+            window.location.href = responseData.redirectUrl;
           }
         } else {
           alert("Failed to update user.");
@@ -75,29 +75,6 @@
         alert("An error occurred. Please try again.");
       }
     }
-    // const formData = new FormData(this);
-    // const data = Object.fromEntries(formData);
-
-    // fetch("/users/edit/:id", {
-    //   method: "put",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(data),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     if (data.redirect) {
-    //       // If redirect is true, redirect to the specified URL
-    //       window.location.href = data.redirectUrl;
-    //     } else {
-    //       // If not redirected, show an alert with the message
-    //       alert(data.message);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error:", error);
-    //   });
   </script>
 </div>
 <%- include('../partials/footer') %>

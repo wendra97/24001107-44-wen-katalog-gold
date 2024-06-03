@@ -31,8 +31,9 @@
               >Edit</a
             >
             <a
-              href="/users/delete/<%= user.user_id %>"
+              href="#"
               class="btn btn-danger btn-sm mx-1"
+              onclick="deleteUser('<%= user.user_id %>')"
               >Delete</a
             >
           </div>
@@ -42,5 +43,68 @@
     </tbody>
   </table>
 </div>
+<script>
+  async function deleteUser(userId) {
+    if (confirm("Are you sure you want to delete this user?")) {
+      try {
+        const response = await fetch(`/users/delete/${userId}`, {
+          method: "DELETE",
+        });
+        const responseData = await response.json();
+        if (response.ok) {
+          alert(responseData.message);
+          if (responseData.redirect) {
+            window.location.href = responseData.redirectUrl;
+          }
+        } else {
+          alert(responseData.message || "Error deleting user");
+        }
+      } catch (error) {
+        alert("Error deleting user");
+      }
+    }
+  }
+</script>
+<!-- <script>
+  async function deleteUser(userId) {
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = `/users/delete/${userId}`;
+
+    const method = document.createElement("input");
+    method.type = "hidden";
+    method.name = "_method";
+    method.value = "delete";
+    form.appendChild(method);
+
+    document.body.appendChild(form);
+    form.submit();
+
+    const formData = new FormData(form);
+    try {
+      const response = await fetch(`/users/delete/${userId}`, {
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(Object.fromEntries(formData)),
+        userId,
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        alert(responseData.message);
+        if (responseData.redirect) {
+          window.location.href = responseData.redirectUrl; // Redirect to specified URL
+        }
+      } else {
+        alert("Failed to update user.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again.");
+    }
+  }
+</script> -->
 
 <%- include('../partials/footer') %>

@@ -58,10 +58,6 @@ const addUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  if (!req.body) {
-    return res.status(400).json({ message: "Request body is empty" });
-  }
-  console.log(req.body);
   const { id } = req.params;
   const { name, email, username, password } = req.body;
   const user = await usersModel.updateUser(id, name, email, username, password);
@@ -74,9 +70,19 @@ const updateUser = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  const { id } = req.params;
-  const user = await usersModel.deleteUser(id);
-  return res.status(200).json({ message: `User ${id} successfully deleted` });
+  try {
+    const { id } = req.params;
+    const user = await usersModel.deleteUser(id); // Adjust to your deletion logic
+    res
+      .status(200)
+      .json({
+        message: `User ${id} successfully deleted`,
+        redirect: true,
+        redirectUrl: "/users",
+      });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting user" });
+  }
 };
 
 module.exports = { getAllUsers, getUserById, addUser, updateUser, deleteUser };
