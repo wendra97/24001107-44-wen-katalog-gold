@@ -1,0 +1,46 @@
+<%- include('../partials/header', { title: title, titleIcon: titleIcon }) %>
+<div class="container-fluid">
+  <h1 class="mt-5">User List</h1>
+  <table
+    class="table table-striped"
+    style="border: 1px solid #cecece; font-size: 15px"
+  >
+    <thead class="table-dark">
+      <tr>
+        <th>No.</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Created Date</th>
+        <th>Last Updated Date</th>
+        <th rowspan="2" class="text-center">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% users.forEach((user, index) => { %>
+      <tr>
+        <td><%= index + 1 %></td>
+        <td><%= user.name %></td>
+        <td><%= user.email %></td>
+        <td><%= user.created_at %></td>
+        <td><%= user.updated_at %></td>
+        <td>
+          <div class="d-flex justify-content-center align-items-center">
+            <a
+              href="/users/edit/<%= user.user_id %>"
+              class="btn btn-primary btn-sm mx-1"
+              >Edit</a
+            >
+            <a
+              href="/users/delete/<%= user.user_id %>"
+              class="btn btn-danger btn-sm mx-1"
+              >Delete</a
+            >
+          </div>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>

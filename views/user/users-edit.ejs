@@ -1,0 +1,103 @@
+<%- include('../partials/header', { title: title, titleIcon: titleIcon }) %>
+<div class="container">
+  <h1 class="mt-5">Edit User</h1>
+  <form
+    id="updateUserForm"
+    action="/users/edit/<%= user.user_id %>"
+    method="post"
+    onsubmit="return updateUser(event)"
+  >
+    <input type="hidden" name="_method" value="put" />
+    <div class="mb-3">
+      <label for="name" class="form-label">Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="name"
+        name="name"
+        value="<%= user.name %>"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        name="email"
+        value="<%= user.email %>"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input
+        type="text"
+        class="form-control"
+        id="username"
+        name="username"
+        value="<%= user.username %>"
+        required
+      />
+    </div>
+    <input type="hidden" name="password" value="<%= user.password %>" />
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+  </form>
+  <script>
+    async function updateUser(event) {
+      event.preventDefault();
+      const form = document.getElementById("updateUserForm");
+      const formData = new FormData(form);
+      const userId = window.location.pathname.split("/").pop();
+
+      try {
+        const response = await fetch(`/users/edit/${userId}`, {
+          method: "put",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(Object.fromEntries(formData)),
+          userId,
+        });
+
+        if (response.ok) {
+          const responseData = await response.json();
+          alert(responseData.message);
+          if (responseData.redirect) {
+            window.location.href = responseData.redirectUrl; // Redirect to specified URL
+          }
+        } else {
+          alert("Failed to update user.");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again.");
+      }
+    }
+    // const formData = new FormData(this);
+    // const data = Object.fromEntries(formData);
+
+    // fetch("/users/edit/:id", {
+    //   method: "put",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     if (data.redirect) {
+    //       // If redirect is true, redirect to the specified URL
+    //       window.location.href = data.redirectUrl;
+    //     } else {
+    //       // If not redirected, show an alert with the message
+    //       alert(data.message);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error:", error);
+    //   });
+  </script>
+</div>
+<%- include('../partials/footer') %>
